@@ -92,13 +92,25 @@ button:hover {
   }
 
   .video-area {
-    max-width: 100%;
-    aspect-ratio: auto; /* 必要に応じて解除も検討 */
-    height: auto;
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    aspect-ratio: 4 / 3; /* 縦横比4:3固定 */
+    margin: 0 auto 1.5rem;
+    border: 6px solid #f5b3c2;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+    background: #fff0f5;
+    overflow: hidden;
   }
 
   canvas {
-    height: auto !important;
-    max-height: 70vh; /* 画面の70%高さに制限 */
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 16px;
+    background: #000;
+    display: block;
+    margin: 0 auto;
+    object-fit: contain; /* ←ここをcontainに変更 */
   }
 }
