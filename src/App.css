@@ -36,23 +36,29 @@ h1 {
 
 
 .video-area {
-  display: inline-block;
+  display: block;
   position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 4 / 3; /* アスペクト比を固定 */
+  margin: 0 auto;
   border: 6px solid #f5b3c2;
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
   background: #fff0f5;
+  overflow: hidden;
 }
 
 canvas {
   width: 100% !important;
-  height: auto !important;
-  max-width: 640px;
+  height: 100% !important;  /* 自動ではなく100%に */
   border-radius: 16px;
   background: #000;
   display: block;
   margin: 0 auto;
+  object-fit: cover; /* 内容がはみ出さないように */
 }
+
 
 .buttons {/*
   margin-top: 1.5rem;
