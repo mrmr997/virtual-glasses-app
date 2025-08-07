@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaceMesh } from "@mediapipe/face_mesh";
 import { Camera } from "@mediapipe/camera_utils";
-import { Button } from "@mui/material";  // ← ここを追加
 import "./App.css";
 
 function App() {
@@ -47,6 +46,14 @@ function App() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
+    // canvasの描画サイズを表示サイズに合わせる（縦横比維持のため）
+    const displayWidth = canvas.clientWidth;
+    const displayHeight = canvas.clientHeight;
+    if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
+      canvas.width = displayWidth;
+      canvas.height = displayHeight;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
 
@@ -69,7 +76,7 @@ function App() {
 
       const img = glassesImagesRef.current[selectedGlassesIndexRef.current];
 
-      // 👇 「無し」や画像未読込みの場合は描画スキップ
+      // 「無し」や画像未読込みの場合は描画スキップ
       if (!img || !img.complete) return;
 
       const imgWidth = distance * 1.8;
@@ -138,7 +145,7 @@ function App() {
       <h1>👓 バーチャルメガネ試着アプリ</h1>
       <div className="video-area">
         <video ref={videoRef} style={{ display: "none" }} playsInline muted />
-        <canvas ref={canvasRef} width="640" height="480" />
+        <canvas ref={canvasRef} />
       </div>
 
       <div className="buttons">
@@ -149,20 +156,16 @@ function App() {
               ? "無し"
               : filename?.split(".").slice(0, -1).join(".") || `メガネ${idx}`;
           return (
-            <Button
+            <button
               key={idx}
-              variant={selectedGlassesIndex === idx ? "contained" : "outlined"}
-              color={selectedGlassesIndex === idx ? "primary" : "secondary"}
               onClick={() => setSelectedGlassesIndex(idx)}
-              sx={{ margin: "0 8px", minWidth: "90px", flexDirection: "column" }}
+              className={selectedGlassesIndex === idx ? "active" : ""}
             >
               {name}
-
-            </Button>
+            </button>
           );
         })}
       </div>
-
     </div>
   );
 }
