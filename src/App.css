@@ -1,3 +1,4 @@
+/* bodyは全体の背景とフォント設定 */
 body {
   margin: 0;
   padding: 0;
@@ -7,8 +8,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
 }
 
+/* アプリのコンテナ。MUIのBoxやContainerの外側としても使える */
 .container {
   text-align: center;
   max-width: 800px;
@@ -18,8 +21,12 @@ body {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(255, 192, 203, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+/* タイトル（MUI Typographyでも代用可能） */
 h1 {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
@@ -30,8 +37,10 @@ h1 {
   margin-bottom: 1.5rem;
   border-bottom: 2px solid #bc5d1d;
   padding-bottom: 0.5rem;
+  width: 100%;
 }
 
+/* カメラ・Canvasの親ボックス */
 .video-area {
   display: block;
   position: relative;
@@ -44,8 +53,10 @@ h1 {
   box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
   background: #fff0f5;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
+/* Canvasは親に合わせてぴったりフィット、縦横比維持 */
 canvas {
   width: 100% !important;
   height: 100% !important;
@@ -53,43 +64,18 @@ canvas {
   background: #000;
   display: block;
   margin: 0 auto;
-  object-fit: cover; /* 内容がはみ出さずに縦横比維持 */
+  object-fit: cover;
 }
 
-.buttons {
-  margin-top: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-}
-
-button {
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  border: 2px solid #f5c2d5;
-  background: #ffe9f0;
-  color: #a44a66;
-  font-weight: bold;
-  font-size: 0.9rem;
-  cursor: pointer;
-  min-width: 90px;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(255, 192, 203, 0.2);
-}
-
+/* MUIボタンのスタイルはJSXで調整するためここではボタンのホバーだけを指定 */
 button:hover {
-  background: #cb5f83;
-  color: white;
+  background: #cb5f83 !important;
+  color: white !important;
   transform: scale(1.05);
+  transition: transform 0.2s ease;
 }
 
-button.active {
-  background: #f06292;
-  color: white;
-  border-color: #ec407a;
-  box-shadow: 0 2px 8px rgba(240, 98, 146, 0.3);
-}
+/* activeなボタンのスタイルはMUIの props で制御する想定 */
 
 /* スマホ対応 */
 @media (max-width: 600px) {
@@ -105,16 +91,14 @@ button.active {
     padding-bottom: 0.3rem;
   }
 
-  .buttons {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
+  .video-area {
+    max-width: 100%;
+    aspect-ratio: auto; /* 必要に応じて解除も検討 */
+    height: auto;
   }
 
-  button {
-    width: 100%;
-    max-width: 280px;
-    font-size: 1rem;
-    padding: 0.75rem;
+  canvas {
+    height: auto !important;
+    max-height: 70vh; /* 画面の70%高さに制限 */
   }
 }

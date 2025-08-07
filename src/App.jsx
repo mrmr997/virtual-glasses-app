@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaceMesh } from "@mediapipe/face_mesh";
 import { Camera } from "@mediapipe/camera_utils";
+import { Button, Stack } from "@mui/material"; // ← MUIのコンポーネントを追加
 import "./App.css";
 
 function App() {
@@ -8,17 +9,14 @@ function App() {
   const canvasRef = useRef(null);
   const glassesImagesRef = useRef([]);
 
-  // JSONから画像ファイル名を読み込む
   const [glassesList, setGlassesList] = useState([]);
   const [selectedGlassesIndex, setSelectedGlassesIndex] = useState(0);
   const selectedGlassesIndexRef = useRef(selectedGlassesIndex);
 
-  // 選択状態をrefにも同期
   useEffect(() => {
     selectedGlassesIndexRef.current = selectedGlassesIndex;
   }, [selectedGlassesIndex]);
 
-  // JSONから画像リスト取得（先頭に"無し"を追加）
   useEffect(() => {
     fetch("/glassesList.json")
       .then((res) => res.json())
@@ -30,7 +28,6 @@ function App() {
       });
   }, []);
 
-  // メガネ画像を先読み
   useEffect(() => {
     if (glassesList.length === 0) return;
     glassesImagesRef.current = glassesList.map((src) => {
@@ -41,12 +38,10 @@ function App() {
     });
   }, [glassesList]);
 
-  // 顔の検出と描画
   const onResults = (results) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    // canvasの描画サイズを表示サイズに合わせる（縦横比維持のため）
     const displayWidth = canvas.clientWidth;
     const displayHeight = canvas.clientHeight;
     if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
@@ -75,8 +70,6 @@ function App() {
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       const img = glassesImagesRef.current[selectedGlassesIndexRef.current];
-
-      // 「無し」や画像未読込みの場合は描画スキップ
       if (!img || !img.complete) return;
 
       const imgWidth = distance * 1.8;
@@ -90,7 +83,6 @@ function App() {
     }
   };
 
-  // カメラとFaceMeshの初期化
   useEffect(() => {
     const start = async () => {
       try {
@@ -143,29 +135,33 @@ function App() {
   return (
     <div className="container">
       <h1>👓 バーチャルメガネ試着アプリ</h1>
+
       <div className="video-area">
         <video ref={videoRef} style={{ display: "none" }} playsInline muted />
         <canvas ref={canvasRef} />
       </div>
 
-      <div className="buttons">
+      {/* MUI Stackでボタンを横並びに美しく配置 */}
+      <Stack direction="row" spacing={2} mt={2} flexWrap="wrap" justifyContent="center">
         {glassesList.map((src, idx) => {
           const filename = src.split("/").pop();
           const name =
             idx === 0
               ? "無し"
               : filename?.split(".").slice(0, -1).join(".") || `メガネ${idx}`;
+
           return (
-            <button
+            <Button
               key={idx}
+              variant={selectedGlassesIndex === idx ? "contained" : "outlined"}
+              color="primary"
               onClick={() => setSelectedGlassesIndex(idx)}
-              className={selectedGlassesIndex === idx ? "active" : ""}
             >
               {name}
-            </button>
+            </Button>
           );
         })}
-      </div>
+      </Stack>
     </div>
   );
 }
