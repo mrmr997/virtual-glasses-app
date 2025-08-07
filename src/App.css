@@ -21,10 +21,19 @@ body {
 }
 
 h1 {
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-  color: #d45d79;
+  font-family: 'Playfair Display', serif; /* 高級感あるセリフ体 */
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #4a4a4a;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #bc5d1d; /* アクセントライン */
+  padding-bottom: 0.5rem;
 }
+
+
+
 
 .video-area {
   display: inline-block;
@@ -45,15 +54,15 @@ canvas {
   margin: 0 auto;
 }
 
-.buttons {
+.buttons {/*
   margin-top: 1.5rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
-}
+*/}
 
-button {
+button {/*
   padding: 0.5rem;
   border-radius: 12px;
   border: 2px solid #f5c2d5;
@@ -65,10 +74,10 @@ button {
   width: 90px;
   transition: all 0.2s ease;
   box-shadow: 0 2px 6px rgba(255, 192, 203, 0.2);
-}
+*/}
 
 button:hover {
-  background: #fbd2e0;
+  background: #cb5f83;
   transform: scale(1.05);
 }
 

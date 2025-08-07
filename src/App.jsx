@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaceMesh } from "@mediapipe/face_mesh";
 import { Camera } from "@mediapipe/camera_utils";
+import { Button } from "@mui/material";  // ← ここを追加
 import "./App.css";
 
 function App() {
@@ -141,41 +142,23 @@ function App() {
       </div>
 
       <div className="buttons">
-         {glassesList.map((src, idx) => {
-           const filename = src.split("/").pop();
-           const name = idx === 0 ? "無し" : filename?.split(".").slice(0, -1).join(".") || `メガネ${idx}`;
+        {glassesList.map((src, idx) => {
+          const filename = src.split("/").pop();
+          const name =
+            idx === 0
+              ? "無し"
+              : filename?.split(".").slice(0, -1).join(".") || `メガネ${idx}`;
           return (
-            <button
+            <Button
               key={idx}
+              variant={selectedGlassesIndex === idx ? "contained" : "outlined"}
+              color={selectedGlassesIndex === idx ? "primary" : "secondary"}
               onClick={() => setSelectedGlassesIndex(idx)}
-              className={selectedGlassesIndex === idx ? "active" : ""}
-              style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+              sx={{ margin: "0 8px", minWidth: "90px", flexDirection: "column" }}
             >
-              {idx !== 0 ? (
-                <img
-                  src={src}
-                  alt={name}
-                  style={{ width: "60px", height: "auto", marginBottom: "4px" }}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: "60px",
-                    height: "40px",
-                    marginBottom: "4px",
-                    background: "#ccc",
-                    borderRadius: "6px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "12px",
-                  }}
-                >
-                  ✖
-                </div>
-              )}
-              <span>{name}</span>
-            </button>
+              {name}
+
+            </Button>
           );
         })}
       </div>
