@@ -87,7 +87,12 @@ function App() {
     const start = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 640, height: 480 },
+          video: {
+            aspectRatio: 9 / 16,
+            facingMode: "user",
+            width: { ideal: 720 },
+            height: { ideal: 1280 },
+          },
         });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
