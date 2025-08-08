@@ -102,16 +102,17 @@ button:hover {
     box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
     background: #fff0f5;
     overflow: visible;
+    object-fit: cover;
   }
 
   canvas {
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
     border-radius: 16px;
     background: #000;
     display: block;
     margin: 0 auto;
-    object-fit: contain;
+    object-fit: cover;
   }
 }
 
