@@ -229,7 +229,12 @@ function App() {
                   textOverflow:"ellipsis",
                   overflow:"hidden"
                 }}
-                onClick={() => setSelectedGlassesIndex(idx)}
+                onClick={() => {
+                  setSelectedGlassesIndex(idx);
+                  if(window.innerWidth<=900){
+                    setShowButtons(false);
+                  }
+                }}
               >
                 {name}
               </Button>
