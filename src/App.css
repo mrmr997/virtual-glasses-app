@@ -114,3 +114,18 @@ button:hover {
     object-fit: contain; /* ←ここをcontainに変更 */
   }
 }
+/* メガネ変更ボタン用（JSXでposition: fixed指定） */
+#glasses-change-button {
+  width: 180px;
+  text-align: center;
+  z-index: 1000;
+  will-change: transform;
+  /* transitionはJSX側で無効化済みならこちら不要 */
+}
+
+/* Stackコンポーネントの固定解除に伴う調整 */
+#glasses-stack {
+  min-height: 56px; /* 高さ確保 */
+  transition: opacity 0.2s ease;
+  /* visibilityはJSXで切替 */
+}

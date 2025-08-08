@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaceMesh } from "@mediapipe/face_mesh";
 import { Camera } from "@mediapipe/camera_utils";
-import { Button, Stack } from "@mui/material"; // ← MUIのコンポーネントを追加
+import { Button, Stack ,Box} from "@mui/material"; // ← MUIのコンポーネントを追加
 import "./App.css";
 
 function App() {
@@ -12,6 +12,15 @@ function App() {
   const [glassesList, setGlassesList] = useState([]);
   const [selectedGlassesIndex, setSelectedGlassesIndex] = useState(0);
   const selectedGlassesIndexRef = useRef(selectedGlassesIndex);
+  const [showButtons, setShowButtons] = useState(false);
+  const [isWide, setIsWide] = useState(window.innerWidth > 600);
+
+  // 画面幅の監視
+  useEffect(() => {
+    const handleResize = () => setIsWide(window.innerWidth > 600);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     selectedGlassesIndexRef.current = selectedGlassesIndex;
@@ -42,8 +51,9 @@ function App() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
-    const displayWidth = canvas.clientWidth;
-    const displayHeight = canvas.clientHeight;
+    const scale = window.devicePixelRatio || 1;
+    const displayWidth = canvas.clientWidth * scale;
+    const displayHeight = canvas.clientHeight * scale;
     if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
       canvas.width = displayWidth;
       canvas.height = displayHeight;
@@ -143,30 +153,92 @@ function App() {
 
       <div className="video-area">
         <video ref={videoRef} style={{ display: "none" }} playsInline muted />
-        <canvas ref={canvasRef} />
+        <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />
+        <Button
+          id="glasses-change-button"
+          variant="contained"
+          onClick={() => setShowButtons(!showButtons)}
+          sx={{
+            display: { xs: "block", md: "none" },
+            position: "fixed",
+            bottom: "1rem",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "180px",
+            textAlign: "center",
+            backgroundColor: "#f06292",
+            transition:"none"
+          }}
+        >
+          {showButtons ? "閉じる" : "メガネ変更"}
+        </Button>
+
+        <Stack
+          id="glasses-stack"
+          direction="row"
+          spacing={2}
+          mt={2}
+          flexWrap="wrap"
+          justifyContent="center"
+          sx={{
+            position: { xs: "static", md: "static" },
+            bottom: "auto",
+            left: "auto",
+            transform: "none",
+            backgroundColor: { xs: "rgba(255,255,255,0.95)", md: "transparent" },
+            padding: { xs: "0.75rem", md: 0 },
+            borderRadius: { xs: 2, md: 0 },
+            boxShadow: { xs: 3, md: 0 },
+          }}
+          style={{
+            visibility: showButtons || isWide ? "visible" : "hidden",
+            opacity: showButtons || isWide ? 1 : 0,
+          }}
+        >
+          {/* ... */}
+        </Stack>
       </div>
 
       {/* MUI Stackでボタンを横並びに美しく配置 */}
-      <Stack direction="row" spacing={2} mt={2} flexWrap="wrap" justifyContent="center">
-        {glassesList.map((src, idx) => {
-          const filename = src.split("/").pop();
-          const name =
-            idx === 0
-              ? "無し"
-              : filename?.split(".").slice(0, -1).join(".") || `メガネ${idx}`;
+      {(showButtons || isWide) && (
+        <Stack
+          direction="row"
+          spacing={2}
+          mt={2}
+          flexWrap="wrap"
+          justifyContent="center"
+          sx={{
+            position: { xs: "fixed", md: "static" },
+            bottom: { xs: "4.5rem", md: "auto" },
+            left: { xs: "50%", md: "auto" },
+            transform: { xs: "translateX(-50%)", md: "none" },
+            zIndex: 9,
+            backgroundColor: { xs: "rgba(255,255,255,0.95)", md: "transparent" },
+            padding: { xs: "0.75rem", md: 0 },
+            borderRadius: { xs: 2, md: 0 },
+            boxShadow: { xs: 3, md: 0 },
+          }}
+        >
+          {glassesList.map((src, idx) => {
+            const filename = src.split("/").pop();
+            const name =
+              idx === 0
+                ? "無し"
+                : filename?.split(".").slice(0, -1).join(".") || `メガネ${idx}`;
 
-          return (
-            <Button
-              key={idx}
-              variant={selectedGlassesIndex === idx ? "contained" : "outlined"}
-              color="primary"
-              onClick={() => setSelectedGlassesIndex(idx)}
-            >
-              {name}
-            </Button>
-          );
-        })}
-      </Stack>
+            return (
+              <Button
+                key={idx}
+                variant={selectedGlassesIndex === idx ? "contained" : "outlined"}
+                color="primary"
+                onClick={() => setSelectedGlassesIndex(idx)}
+              >
+                {name}
+              </Button>
+            );
+          })}
+        </Stack>
+      )}
     </div>
   );
 }
