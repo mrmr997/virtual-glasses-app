@@ -95,7 +95,7 @@ button:hover {
     position: relative;
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 9 / 16;
+    aspect-ratio: 3 / 4;
     margin: 0 auto 1.5rem;
     border: 6px solid #f5b3c2;
     border-radius: 16px;
