@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaceMesh } from "@mediapipe/face_mesh";
 import { Camera } from "@mediapipe/camera_utils";
-import { Button, Stack ,Box} from "@mui/material"; // ← MUIのコンポーネントを追加
+import { Button, Stack, Box } from "@mui/material";
 import "./App.css";
 
 function App() {
@@ -13,11 +13,11 @@ function App() {
   const [selectedGlassesIndex, setSelectedGlassesIndex] = useState(0);
   const selectedGlassesIndexRef = useRef(selectedGlassesIndex);
   const [showButtons, setShowButtons] = useState(false);
-  const [isWide, setIsWide] = useState(window.innerWidth > 600);
+  const [isWide, setIsWide] = useState(window.innerWidth > 900);
 
   // 画面幅の監視
   useEffect(() => {
-    const handleResize = () => setIsWide(window.innerWidth > 600);
+    const handleResize = () => setIsWide(window.innerWidth > 900);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -149,74 +149,66 @@ function App() {
 
   return (
     <div className="container">
-      <h1>👓 バーチャルメガネ試着アプリ</h1>
+      <h1>バーチャルメガネ試着アプリ</h1>
 
+      {/* 動画・キャンバス表示部分 */}
       <div className="video-area">
         <video ref={videoRef} style={{ display: "none" }} playsInline muted />
         <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />
-        <Button
-          id="glasses-change-button"
-          variant="contained"
-          onClick={() => setShowButtons(!showButtons)}
-          sx={{
-            display: { xs: "block", md: "none" },
-            position: "fixed",
-            bottom: "1rem",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "180px",
-            textAlign: "center",
-            backgroundColor: "#f06292",
-            transition:"none"
-          }}
-        >
-          {showButtons ? "閉じる" : "メガネ変更"}
-        </Button>
-
-        <Stack
-          id="glasses-stack"
-          direction="row"
-          spacing={2}
-          mt={2}
-          flexWrap="wrap"
-          justifyContent="center"
-          sx={{
-            position: { xs: "static", md: "static" },
-            bottom: "auto",
-            left: "auto",
-            transform: "none",
-            backgroundColor: { xs: "rgba(255,255,255,0.95)", md: "transparent" },
-            padding: { xs: "0.75rem", md: 0 },
-            borderRadius: { xs: 2, md: 0 },
-            boxShadow: { xs: 3, md: 0 },
-          }}
-          style={{
-            visibility: showButtons || isWide ? "visible" : "hidden",
-            opacity: showButtons || isWide ? 1 : 0,
-          }}
-        >
-          {/* ... */}
-        </Stack>
       </div>
 
-      {/* MUI Stackでボタンを横並びに美しく配置 */}
+      {/* スマホだけ表示：メガネ変更・閉じるボタン */}
+      <Box
+        sx={{
+          display: { xs: "block", md: "none" },
+          position: "fixed",
+          bottom: "1rem",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "180px",
+          textAlign: "center",
+          zIndex: 1500,
+        }}
+      >
+        {!showButtons && (
+          <Button
+            variant="contained"
+            sx={{ width: "100%", backgroundColor: "#f06292" }}
+            onClick={() => setShowButtons(true)}
+          >
+            メガネ変更
+          </Button>
+        )}
+        {showButtons && (
+          <Button
+            variant="contained"
+            sx={{ width: "100%", backgroundColor: "#f06292" }}
+            onClick={() => setShowButtons(false)}
+          >
+            閉じる
+          </Button>
+        )}
+      </Box>
+
+      {/* メガネ選択ボタン群 */}
       {(showButtons || isWide) && (
         <Stack
-          direction="row"
+          direction={{xs:"column",md:"row"}}
           spacing={2}
-          mt={2}
           flexWrap="wrap"
           justifyContent="center"
           sx={{
-            position: { xs: "fixed", md: "static" },
-            bottom: { xs: "4.5rem", md: "auto" },
-            left: { xs: "50%", md: "auto" },
+            position: { xs: "fixed", md: "static" }, // スマホは固定、PCは通常フロー
+            bottom: { xs: "4.5rem", md: "auto" },  // スマホは画面下から少し上げる
+            left: { xs: "50%", md: "auto" },       // スマホは中央寄せ
             transform: { xs: "translateX(-50%)", md: "none" },
-            zIndex: 9,
+            zIndex: 1400,
             backgroundColor: { xs: "rgba(255,255,255,0.95)", md: "transparent" },
             padding: { xs: "0.75rem", md: 0 },
             borderRadius: { xs: 2, md: 0 },
             boxShadow: { xs: 3, md: 0 },
+            maxWidth: { xs: "95vw", md: "700px" },
+            margin: { md: "1rem auto 0 auto" }, // PCは中央に余白付きで表示
           }}
         >
           {glassesList.map((src, idx) => {
@@ -231,6 +223,12 @@ function App() {
                 key={idx}
                 variant={selectedGlassesIndex === idx ? "contained" : "outlined"}
                 color="primary"
+                sx={{
+                  minWidth:{xs:"100%",md:"auto"}, //スマホは幅いっぱい、PCは自動
+                  whiteSpace:"nowrap",
+                  textOverflow:"ellipsis",
+                  overflow:"hidden"
+                }}
                 onClick={() => setSelectedGlassesIndex(idx)}
               >
                 {name}

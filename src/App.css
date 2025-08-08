@@ -24,6 +24,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: visible; /* 画面内からはみ出す要素を見えるように */
 }
 
 /* タイトル（MUI Typographyでも代用可能） */
@@ -52,7 +53,7 @@ h1 {
   border-radius: 16px;
   box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
   background: #fff0f5;
-  overflow: hidden;
+  overflow:hidden;
   flex-shrink: 0;
 }
 
@@ -67,7 +68,7 @@ canvas {
   object-fit: cover;
 }
 
-/* MUIボタンのスタイルはJSXで調整するためここではボタンのホバーだけを指定 */
+/* MUIボタンのホバー効果 */
 button:hover {
   background: #cb5f83 !important;
   color: white !important;
@@ -75,13 +76,12 @@ button:hover {
   transition: transform 0.2s ease;
 }
 
-/* activeなボタンのスタイルはMUIの props で制御する想定 */
-
 /* スマホ対応 */
 @media (max-width: 600px) {
   .container {
     width: 95vw;
     padding: 0.5rem;
+    overflow: visible;
   }
 
   h1 {
@@ -95,13 +95,13 @@ button:hover {
     position: relative;
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 9 / 16; /* 縦横比16:9固定 */
+    aspect-ratio: 9 / 16;
     margin: 0 auto 1.5rem;
     border: 6px solid #f5b3c2;
     border-radius: 16px;
     box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
     background: #fff0f5;
-    overflow: hidden;
+    overflow: visible;
   }
 
   canvas {
@@ -111,21 +111,19 @@ button:hover {
     background: #000;
     display: block;
     margin: 0 auto;
-    object-fit: contain; /* ←ここをcontainに変更 */
+    object-fit: contain;
   }
 }
-/* メガネ変更ボタン用（JSXでposition: fixed指定） */
-#glasses-change-button {
-  width: 180px;
-  text-align: center;
-  z-index: 1000;
-  will-change: transform;
-  /* transitionはJSX側で無効化済みならこちら不要 */
-}
 
-/* Stackコンポーネントの固定解除に伴う調整 */
+/* メガネ変更・閉じるボタン用BoxはJSX側でfixed指定 */
+/* #glasses-change-buttonは使わないので削除 */
+
+/* メガネ選択ボタン群（Stack） */
 #glasses-stack {
   min-height: 56px; /* 高さ確保 */
   transition: opacity 0.2s ease;
-  /* visibilityはJSXで切替 */
+  /* visibilityはJSX側で制御 */
+  /* PCで普通に表示されるのでpositionはstatic */
 }
+
+/* スマホ時のメガネ選択ボタン群はJSXのStackでfixed指定し背景白で見やすくしているのでCSSでは特に制御不要 */
