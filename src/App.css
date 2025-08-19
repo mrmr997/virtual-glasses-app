@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: linear-gradient(to right, #e45aff, #a842bc);
+  background: #ff0000;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   justify-content: center;
@@ -18,7 +18,7 @@ body {
   width: 90vw;
   padding: 1rem;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(231, 217, 217, 0.8);
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(255, 192, 203, 0.3);
   display: flex;
