@@ -82,11 +82,11 @@ function App() {
       const img = glassesImagesRef.current[selectedGlassesIndexRef.current];
       if (!img || !img.complete) return;
 
-      const imgWidth = distance * 1.8;
+      const imgWidth = distance * 1.6;
       const imgHeight = imgWidth * (img.height / img.width);
 
       ctx.save();
-      const offsetY = distance * 0.05; // 👈 ここで調整
+      const offsetY = distance * 0.05; // 👈 ここでメガネの高さ調整5％
       ctx.translate(centerX, centerY + offsetY);
       ctx.rotate(angle);
       ctx.drawImage(img, -imgWidth / 2, -imgHeight / 2, imgWidth, imgHeight);
