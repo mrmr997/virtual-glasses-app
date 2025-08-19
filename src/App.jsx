@@ -86,7 +86,7 @@ function App() {
       const imgHeight = imgWidth * (img.height / img.width);
 
       ctx.save();
-      const offsetY = distance * 0.1; // 👈 ここで調整
+      const offsetY = distance * 0.05; // 👈 ここで調整
       ctx.translate(centerX, centerY + offsetY);
       ctx.rotate(angle);
       ctx.drawImage(img, -imgWidth / 2, -imgHeight / 2, imgWidth, imgHeight);
