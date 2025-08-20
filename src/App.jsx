@@ -60,7 +60,11 @@ function App() {
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(canvas.width,0);//x方向にキャンバス幅だけ移動
+    ctx.scale(-1,1); // 左右反転
     ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+    ctx.restore();
 
     if (
       results.multiFaceLandmarks &&
@@ -71,12 +75,16 @@ function App() {
       const leftEye = landmarks[33];
       const rightEye = landmarks[263];
 
-      const centerX = ((leftEye.x + rightEye.x) / 2) * canvas.width;
+      let centerX = ((leftEye.x + rightEye.x) / 2) * canvas.width;
       const centerY = ((leftEye.y + rightEye.y) / 2) * canvas.height;
+
+      //左右反転
+      centerX = canvas.width - centerX;
+
 
       const dx = (rightEye.x - leftEye.x) * canvas.width;
       const dy = (rightEye.y - leftEye.y) * canvas.height;
-      const angle = Math.atan2(dy, dx);
+      const angle = -Math.atan2(dy, dx);
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       const img = glassesImagesRef.current[selectedGlassesIndexRef.current];
