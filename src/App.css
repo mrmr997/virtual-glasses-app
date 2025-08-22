@@ -128,3 +128,27 @@ button:hover {
 }
 
 /* スマホ時のメガネ選択ボタン群はJSXのStackでfixed指定し背景白で見やすくしているのでCSSでは特に制御不要 */
+/* 参考イメージのオーバーレイ */
+.video-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 10;
+  pointer-events: none; /* キャンバス操作を邪魔しない */
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 600px) {
+  .video-overlay {
+    top: 4px;
+    left: 4px;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+  }
+}
